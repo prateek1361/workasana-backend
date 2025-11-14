@@ -135,12 +135,14 @@ app.post("/tags", verifyToken, async (req, res) => {
 
 
 app.get("/tasks", verifyToken, async (req, res) =>
-  res.json(await Task.find().populate("project team owners"))
+  res.json(await Task.find().populate("owners", "name email"))
 );
 app.post("/tasks", verifyToken, async (req, res) => {
   try {
     const task = new Task(req.body);
     await task.save();
+
+     task = await task.populate("owners", "name email")
     res.json(task);
   } catch (e) {
     res.status(400).json({ error: e.message });
