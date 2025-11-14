@@ -136,27 +136,18 @@ app.post("/tags", verifyToken, async (req, res) => {
 
 
 app.get("/tasks", verifyToken, async (req, res) => {
-  try {
-    const tasks = await Task.find()
-      .populate("owners", "name")   // <— THIS POPULATES OWNER NAMES
-      .populate("project", "name")
-      .populate("team", "name");
-
-    res.json(tasks);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+  const tasks = await Task.find()
+    .populate("project", "name")
+    .populate("team", "name");
+  res.json(tasks);
 });
 
 
 app.post("/tasks", verifyToken, async (req, res) => {
   try {
-    let task = new Task(req.body);
+    const task = new Task(req.body);
     await task.save();
-
-    task = await Task.findById(task._id).populate("owners", "name");  
     res.json(task);
-
   } catch (e) {
     res.status(400).json({ error: e.message });
   }

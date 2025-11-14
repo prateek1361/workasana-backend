@@ -6,7 +6,7 @@ const taskSchema = new mongoose.Schema({
  team: { type: mongoose.Schema.Types.ObjectId, ref: 'Team',
 required: true }, 
  owners: [
- { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true } 
+ { type: String, required: true } 
  ],
  tags: [{ type: String }], 
  timeToComplete: { type: Number, required: true }, 
