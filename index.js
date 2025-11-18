@@ -150,7 +150,6 @@ app.post("/tags", verifyToken, async (req, res) => {
 app.get("/tasks", verifyToken, async (req, res) => {
   const tasks = await Task.find()
     .populate("project", "name")
-    .
   res.json(tasks);
 });
 
