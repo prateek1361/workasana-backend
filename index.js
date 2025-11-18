@@ -150,7 +150,7 @@ app.post("/tags", verifyToken, async (req, res) => {
 app.get("/tasks", verifyToken, async (req, res) => {
   const tasks = await Task.find()
     .populate("project", "name")
-    .populate("team", "name");
+    .
   res.json(tasks);
 });
 
@@ -169,7 +169,7 @@ app.get("/tasks/:id", verifyToken, async (req, res) => {
   try {
     const task = await Task.findById(req.params.id)
       .populate("project", "name")
-      .populate("team", "name");
+     
 
     if (!task) {
       return res.status(404).json({ error: "Task not found" });
