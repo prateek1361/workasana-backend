@@ -153,6 +153,23 @@ app.post("/tasks", verifyToken, async (req, res) => {
   }
 });
 
+app.get("/tasks/:id", verifyToken, async (req, res) => {
+  try {
+    const task = await Task.findById(req.params.id)
+      .populate("project", "name")
+      .populate("team", "name");
+
+    if (!task) {
+      return res.status(404).json({ error: "Task not found" });
+    }
+
+    res.json(task);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+
 
 
 
