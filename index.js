@@ -106,9 +106,21 @@ app.post("/projects", verifyToken, async (req, res) => {
 });
 
 
-app.get("/teams", verifyToken, async (req, res) =>
-  res.json(await Team.find())
-);
+app.get("/teams", verifyToken, async (req, res) => {
+  const teams = await Team.find();
+  res.json(teams);
+});
+
+app.post("/teams", verifyToken, async (req, res) => {
+  try {
+    const team = new Team(req.body);
+    await team.save();
+    res.json(team);
+  } catch (e) {
+    res.status(400).json({ error: e.message });
+  }
+});
+
 app.post("/teams", verifyToken, async (req, res) => {
   try {
     const t = new Team(req.body);

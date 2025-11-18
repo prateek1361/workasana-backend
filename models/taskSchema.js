@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const taskSchema = new mongoose.Schema({
  name: { type: String, required: true },
  project: { type: mongoose.Schema.Types.ObjectId, ref: 'Project', required: true }, 
- team: { type: mongoose.Schema.Types.ObjectId, ref: 'Team',
+ team: { type: String,
 required: true }, 
  owners: [
  { type: String, required: true } 
