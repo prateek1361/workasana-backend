@@ -121,15 +121,20 @@ app.post("/teams", verifyToken, async (req, res) => {
   }
 });
 
-app.post("/teams", verifyToken, async (req, res) => {
-  try {
-    const t = new Team(req.body);
-    await t.save();
-    res.json(t);
-  } catch (e) {
-    res.status(400).json({ error: e.message });
-  }
+app.get("/teams/:id", verifyToken, async (req, res) => {
+  const team = await Team.findById(req.params.id);
+  res.json(team);
 });
+
+app.put("/teams/:id", verifyToken, async (req, res) => {
+  const updatedTeam = await Team.findByIdAndUpdate(
+    req.params.id,
+    req.body,
+    { new: true }
+  );
+  res.json(updatedTeam);
+});
+
 
 
 app.get("/tags", verifyToken, async (req, res) =>
