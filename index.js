@@ -185,7 +185,67 @@ app.get("/tasks/:id", verifyToken, async (req, res) => {
   }
 });
 
+app.delete("/projects/:id", async (req, res) => {
+  try {
+    const deletedProject = await Project.findByIdAndDelete(req.params.id);
 
+    if (!deletedProject) {
+      return res.status(404).json({ message: "Project not found" });
+    }
+
+    // Cascade delete tasks belonging to this project
+    await Task.deleteMany({ project: req.params.id });
+
+    res.json({
+      message: "Project and its tasks deleted successfully",
+      project: deletedProject,
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.delete("/tasks/:id", async (req, res) => {
+  try {
+    const deletedTask = await Task.findByIdAndDelete(req.params.id);
+
+    if (!deletedTask) {
+      return res.status(404).json({ message: "Task not found" });
+    }
+
+    // Cascade delete team associated with this task
+    if (deletedTask.team) {
+      await Team.findByIdAndDelete(deletedTask.team);
+    }
+
+    res.json({
+      message: "Task and its team deleted successfully",
+      task: deletedTask,
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.delete("/teams/:id", async (req, res) => {
+  try {
+    const deletedTeam = await Team.findByIdAndDelete(req.params.id);
+
+    if (!deletedTeam) {
+      return res.status(404).json({ message: "Team not found" });
+    }
+
+    // Optional: delete tasks assigned to this team
+    await Task.deleteMany({ team: req.params.id });
+
+    res.json({
+      message: "Team deleted successfully",
+      team: deletedTeam,
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 
 
 
