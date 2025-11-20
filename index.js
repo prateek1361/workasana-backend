@@ -213,13 +213,8 @@ app.delete("/tasks/:id", async (req, res) => {
       return res.status(404).json({ message: "Task not found" });
     }
 
-    // Cascade delete team associated with this task
-    if (deletedTask.team) {
-      await Team.findByIdAndDelete(deletedTask.team);
-    }
-
     res.json({
-      message: "Task and its team deleted successfully",
+      message: "Task deleted successfully",
       task: deletedTask,
     });
   } catch (error) {
@@ -235,17 +230,18 @@ app.delete("/teams/:id", async (req, res) => {
       return res.status(404).json({ message: "Team not found" });
     }
 
-    // Optional: delete tasks assigned to this team
-    await Task.deleteMany({ team: req.params.id });
+    
+    await Task.deleteMany({ team: deletedTeam.name });
 
     res.json({
-      message: "Team deleted successfully",
+      message: "Team and its tasks deleted successfully",
       team: deletedTeam,
     });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
+
 
 
 
